@@ -1,28 +1,22 @@
-"""
-Minimal command parser for one line at a time.
-Expected commands:
-  CREATE <queue_id> <capacity>
-  ENQ <queue_id> <item_name>
-  SKIP <queue_id>
-  RUN <quantum> [steps]
-Lines beginning with '#' are comments. A *blank* line ends the session at the CLI layer.
-"""
-
-from typing import List, Tuple, Optional
-
+# src/parser.py
+from typing import Optional, Tuple, List
 
 def parse_command(line: str) -> Optional[Tuple[str, List[str]]]:
     """
-    Return (COMMAND, args) or None for blank/comment-only lines.
-
-    Do NOT raise; leave semantic checks to the scheduler and tests.
-    Keep whitespace handling predictable.
+    Parse a single CLI command line.
+    Returns (command, args) or None for comments/blank lines.
+    Commands are case-sensitive per spec.
+    Lines starting with '#' or blank -> None.
     """
+    if line is None:
+        return None
     s = line.strip()
-    if not s or s.startswith("#"):
+    if s == "":
+        # blank line is handled by CLI (ends session), here return empty to signal it
+        return ("", [])
+    if s.startswith("#"):
         return None
     parts = s.split()
-    cmd, args = parts[0], parts[1:]
-    cmd = cmd.upper()
-    # Allowed commands; anything else still returns a tuple and is validated downstream.
-    return cmd, args
+    cmd = parts[0]
+    args = parts[1:]
+    return (cmd, args)
