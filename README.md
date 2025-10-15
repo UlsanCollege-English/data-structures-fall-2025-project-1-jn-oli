@@ -3,48 +3,49 @@
 
 ## How to run
 
-(Insert directions to run your program here.)
+Open your terminal and go to the `src` folder of the project:
+   ```bash
+   cd src
+   2, Run the café simulation program using:
+
+python cli.py
+
+
+Once the program starts, type your commands one by one (they are case-sensitive).
+Example:
+
+CREATE A 3
+ENQ A latte
+ENQ A tea
+RUN 2 3
+
+
+To end the program:
+
+Press Enter on a blank line, or
+
+Press Ctrl + C
+
+The program will print the message:
+
+Break time!
 
 
 ## How to run tests locally
-(Insert directions to run your tests here.)
+1. Make sure you are in the **root directory** of your project (where the `src/` and `tests/` folders are located).
+
+2. Run the following command in your terminal:
+   ```bash
+   python -m pytest -q
 
 
 ## Complexity Notes
-Briefly justify:
+ Queue Design
+- Each queue is implemented as a **circular buffer** inside the `QueueRR` class (see `scheduler.py`).
+- It uses a fixed-size list `_buf` and head/size pointers (`_head`, `_size`) to allow constant-time operations.
+- This avoids using Python’s `deque` and ensures O(1) enqueue/dequeue efficiency.
 
-- Your queue design (e.g., circular buffer).
-
-- Time complexity: enqueue, dequeue amortized O(1); run is O(#turns + total_minutes_worked).
-
-- Space complexity: O(N) tasks + metadata.
-
-
-## **Delete this section before submission.**
-### Common pitfalls
-- Display should print after each RUN turn only.
-
-- Don’t advance time on empty or skipped queues.
-
-- Enforce 1 ≤ steps ≤ #queues for RUN.
-
-- Auto task IDs per queue: <queue_id>-NNN (zero-padded).
-
-- Use exact messages:
-
-    - Sorry, we're at capacity.
-
-    - Sorry, we don't serve that.
-
-
-### Grading rubric (I will be using this to grade your submission)
-
-**__Correctness (50):__** RR behavior, logs, display-per-turn, auto task ids, menu handling, rejects.
-
-**__Complexity notes (15):__** correct, concise, justified.
-
-**__Student tests (15):__** ≥4 targeted, deterministic tests incl. steps validation.
-
-**__Code quality (10):__** structure, type hints on public surfaces, docstrings, PEP 8.
-
-**__Docs & UX (10):__** README completeness; exact messages; clear CLI.
+### Time Complexity
+- **Enqueue:** O(1) — inserting at the back of the circular buffer.  
+- **Dequeue:** O(1) — removing from the front of the buffer.  
+- **Run:** O(#turns + total_minutes_worked) — each task is processed once per turn until completion.
